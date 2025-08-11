@@ -6,3 +6,6 @@ CakePHPの開発を想定した開発環境です。
 - MySQL9.4
 - phpmyadmin
 - mailpit
+
+使い方に関しては、こちらをご参照ください\
+https://qiita.com/tsubai/items/6855fe6e8e8bad51c01e
