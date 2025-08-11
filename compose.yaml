@@ -1,0 +1,57 @@
+services:
+  php:
+    build: ./
+    container_name: php_svr
+    ports:
+      - 8080:80
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/php.ini
+      - ./html:/var/www/html
+    networks:
+      my-network:
+        ipv4_address: 192.168.0.10
+  mysql:
+    image: mysql:9.4
+    container_name: db_svr
+    ports:
+      - 3306:3306
+    volumes:
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=testdb
+      - TZ=Asia/Tokyo
+    networks:
+      my-network:
+        ipv4_address: 192.168.0.11
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    ports:
+      - 4040:80
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
+    networks:
+      my-network:
+        ipv4_address: 192.168.0.12
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+    volumes:
+      - ./mailpit:/data
+    networks:
+      my-network:
+        ipv4_address: 192.168.0.13
+
+networks:
+  my-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
